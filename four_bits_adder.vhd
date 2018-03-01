@@ -11,11 +11,14 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity four_bits_adder is
     Port ( x : in std_logic_vector(3 downto 0);
            y : in std_logic_vector(3 downto 0);
+			  carryin : in std_logic;
+			  overflow : out std_logic;
            s0 : out std_logic_vector(3 downto 0));
 end four_bits_adder;
  
 architecture Behavioral of four_bits_adder is
 signal c : std_logic_vector (3 downto 0):="0000";
+
 component one_bit_adder 
 port(a,b,cin:in std_logic; 
  s,cout:out std_logic);
@@ -23,8 +26,8 @@ end component;
  
 begin
  
-bit1: one_bit_adder port map (a=>x(0), b=>y(0), s=>s0(0), cin=>c(0), cout=>c(1));
+bit1: one_bit_adder port map (a=>x(0), b=>y(0), s=>s0(0), cin=>carryin, cout=>c(1));
 bit2: one_bit_adder port map (a=>x(1), b=>y(1), s=>s0(1), cin=>c(1), cout=>c(2));
 bit3: one_bit_adder port map (a=>x(2), b=>y(2), s=>s0(2), cin=>c(2), cout=>c(3));
-bit4: one_bit_adder port map (a=>x(3), b=>y(3), s=>s0(3), cin=>c(3), cout=>c(0));
+bit4: one_bit_adder port map (a=>x(3), b=>y(3), s=>s0(3), cin=>c(3), cout=>overflow);
 end Behavioral;

@@ -1,29 +1,29 @@
-LIBRARY ieee  ; 
-LIBRARY std  ; 
+LIBRARY ieee ; 
 USE ieee.std_logic_1164.all  ; 
-USE ieee.std_logic_arith.all  ; 
-USE ieee.std_logic_textio.all  ; 
-USE ieee.STD_LOGIC_UNSIGNED.all  ; 
-USE ieee.std_logic_unsigned.all  ; 
-USE std.textio.all  ; 
-ENTITY \four_bits_tb.vhd\  IS 
+
+ENTITY four_bits_tb  IS 
 END ; 
  
-ARCHITECTURE \four_bits_tb.vhd_arch\   OF \four_bits_tb.vhd\   IS
+ARCHITECTURE sim   OF four_bits_tb   IS
   SIGNAL x   :  std_logic_vector (3 downto 0)  ; 
   SIGNAL y   :  std_logic_vector (3 downto 0)  ; 
   SIGNAL s0   :  std_logic_vector (3 downto 0)  ; 
+  SIGNAL carryin : std_logic;
+  SIGNAL overflow : std_logic;
   COMPONENT four_bits_adder  
-    PORT ( 
-      x  : in std_logic_vector (3 downto 0) ; 
-      y  : in std_logic_vector (3 downto 0) ; 
-      s0  : out std_logic_vector (3 downto 0) ); 
+    PORT ( x : in std_logic_vector(3 downto 0);
+           y : in std_logic_vector(3 downto 0);
+			  carryin : in std_logic;
+			  overflow : out std_logic;
+           s0 : out std_logic_vector(3 downto 0));
   END COMPONENT ; 
 BEGIN
   DUT  : four_bits_adder  
     PORT MAP ( 
       x   => x  ,
       y   => y  ,
+		carryin => carryin,
+		overflow => overflow,
       s0   => s0   ) ; 
 
 
@@ -31,33 +31,34 @@ BEGIN
 -- "Counter Pattern"(Range-Up) : step = 1 Range(0000-1111)
 -- Start Time = 0 ps, End Time = 800 ps, Period = 50 ps
   Process
-	variable VARx  : std_logic_vector (3 downto 0);
 	Begin
-	VARx  := "0000" ;
-	for repeatLength in 1 to 16
-	loop
-	    x  <= VARx  ;
-	   wait for 50 ps ;
-	   VARx  := VARx  + 1 ;
-	end loop;
+	
+	carryin <= '0'; 
+	
+	x <= "0000";
+	y <= "1010";
+	wait for 100 ps ;
+	assert s0 = "1010" report "0000 + 1010 failed.";
+	
+	
+	x <= "0011";
+	y <= "0011";
+	wait for 100 ps ;
+	assert s0 = "0110" report "0011 + 0011 failed.";
+	
+	x <= "1100";
+	y <= "0011";
+	wait for 100 ps ;
+	assert s0 = "1111" report "1100 + 0011 failed.";
+	
+	
+	x <= "1010";
+	y <= "0101";
+	wait for 100 ps ;
+	assert s0 = "1111" report "y + x failed.";
+	
 -- 800 ps, repeat pattern in loop.
 	wait;
  End Process;
 
-
--- "Counter Pattern"(Range-Up) : step = 1 Range(0000-1111)
--- Start Time = 0 ps, End Time = 800 ps, Period = 50 ps
-  Process
-	variable VARy  : std_logic_vector (3 downto 0);
-	Begin
-	VARy  := "0000" ;
-	for repeatLength in 1 to 16
-	loop
-	    y  <= VARy  ;
-	   wait for 50 ps ;
-	   VARy  := VARy  + 1 ;
-	end loop;
--- 800 ps, repeat pattern in loop.
-	wait;
- End Process;
 END;
