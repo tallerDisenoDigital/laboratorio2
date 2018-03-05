@@ -1,4 +1,4 @@
-module parameterizable_adder_register #(bit_count = 4)
+module parameterizable_counter #(bit_count = 4)
 	(input logic reset,enable,clk,output logic[bit_count-1:0] s,output logic overflow);
 
 	logic[bit_count-1:0] a,d;

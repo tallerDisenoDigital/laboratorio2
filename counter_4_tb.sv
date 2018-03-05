@@ -14,7 +14,7 @@ module counter_4_tb();
 	logic[3:0] sout4;
 	
 	
-	parameterizable_adder_register dut(reset,enable,clk,sout4,overflow);
+	parameterizable_counter	dut(reset,enable,clk,sout4,overflow);
 	
 	always
 		begin
