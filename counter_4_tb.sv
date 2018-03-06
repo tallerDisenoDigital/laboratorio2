@@ -16,6 +16,7 @@ module counter_4_tb();
 	
 	parameterizable_counter	dut(reset,enable,clk,sout4,overflow);
 	
+	
 	always
 		begin
 			clk = 1; #10; clk = 0; #10;

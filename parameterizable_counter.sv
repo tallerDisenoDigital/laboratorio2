@@ -9,7 +9,7 @@ module parameterizable_counter #(bit_count = 4)
 	
 	parameterizable_adder #(bit_count) my_adder(a,s,cin,d,local_overflow);
 	
-	always@(posedge clk)
+	always_ff@(posedge clk)
 		begin
 			if(reset | overflow)
 			begin
